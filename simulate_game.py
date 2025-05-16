@@ -36,17 +36,19 @@ class Game:
 def simulate_games(num_games):
     winners = Counter()
     ranking = Counter()
+    skill = Counter()
 
     for i in range(num_games):
         game = Game()
         result = game.play()
         winners[result[-1].id] += 1
         for i, runner in enumerate(result):
+            skill[runner.id] += runner.skill_count
             ranking[runner.id] += len(result)-i
 
     print("Simulation Results:")
     for runner, wins in sorted(winners.items(), key=lambda x: x[1], reverse=True):
-        print(f"{runner}: win rate = {format(wins/num_games, '.1%')}; ideal odd = {0.2*num_games/wins+0.8:.2f}; average rank = {ranking[runner]/num_games:.2f}")
+        print(f"{runner}: win rate = {format(wins/num_games, '.1%')}; ideal odd = {0.2*num_games/wins+0.8:.2f}; average rank = {ranking[runner]/num_games:.2f}; average skill count = {skill[runner]/num_games:.2f}")
 
 if __name__ == "__main__":
     simulate_games(10000)
